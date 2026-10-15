@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ForkCast</title>
+<meta name="description" content="ForkCast: predictive recovery for frozen vision-language-action policies by comparing counterfactual futures.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+
+<section class="hero">
+  <h1>ForkCast: Predictive Recovery for Vision-Language-Action Policies via Counterfactual Futures</h1>
+  <p class="authors"><a href="../">Chenru Wen</a><sup>1*</sup>, Huajian Zeng<sup>1*</sup>, Haokai Ding<sup>1</sup>, Jian Kang<sup>1</sup>, Anqing Duan<sup>1</sup>, Dawei Zhou<sup>2</sup>, Dezhen Song<sup>1</sup>, Xingxing Zuo<sup>1&dagger;</sup></p>
+  <p class="affil"><sup>1</sup>Mohamed bin Zayed University of Artificial Intelligence &nbsp; <sup>2</sup>Virginia Tech<br><span class="small">* equal contribution &nbsp; &dagger; corresponding author</span></p>
+  <p class="venue">Under review at IEEE ICRA 2027</p>
+  <div class="buttons">
+    <a class="btn" href="https://arxiv.org/abs/2610.18650">Paper (arXiv)</a>
+    <a class="btn" href="#real-robot">Real-robot videos</a>
+    <span class="btn disabled">Code (after review)</span>
+  </div>
+</section>
+
+<figure>
+  <img src="img/teaser.png" alt="ForkCast overview: at a decision point, the predicted futures of COMMIT, REOBSERVE and REPLAN are compared at the same horizon; REOBSERVE ranks highest and reveals an occluded cup, then COMMIT ranks highest and the frozen policy resumes." width="768" height="585" style="max-width:520px;margin:0 auto">
+</figure>
+
+<div class="tldr">
+  <strong>TL;DR.</strong> When a frozen VLA policy is disrupted by occlusion or object slip, ForkCast forecasts what would happen if
+  the robot kept executing the policy, moved its camera and re-queried the policy, or replanned the arm, and runs the
+  continuation with the highest predicted task progress. One comparison decides both whether to intervene and how. There is
+  no failure detector, no threshold, and no update to the VLA.
+</div>
+
+<h2>Abstract</h2>
+<p>Vision&ndash;language&ndash;action (VLA) policies perform manipulation tasks using camera images and language instructions, but
+object slip or visual occlusion can disrupt execution. Recovery is typically learned during policy training or delegated to a
+monitor that triggers a scripted repair after detecting a failure. We introduce ForkCast, a predictive recovery framework that
+compares counterfactual futures to determine whether and how to intervene in a frozen VLA policy. At each decision point, ForkCast
+evaluates three candidates: executing the policy's nominal action chunk (COMMIT), adjusting the camera viewpoint (REOBSERVE), and
+replanning the arm trajectory (REPLAN). A candidate-conditioned world model forecasts the latent outcome of each candidate at a
+common future horizon, and a shared task-progress head scores the predicted outcomes. By evaluating the policy's own continuation
+alongside the repair candidates, a single comparison based on task progress determines both whether and how to intervene, without
+a failure detector, an intervention threshold, or updates to the VLA backbone. On five simulated RoboTwin 2.0 tasks with injected
+occlusion and object slip, ForkCast increases pooled success from 13.3% for the frozen &pi;<sub>0.5</sub> policy to 30.0% and
+transfers to two additional VLA backbones without retraining. After adaptation on real-robot candidate rollouts, ForkCast also
+improves success over the base policy under clean and visibility-limited conditions.</p>
+
+<h2>Method</h2>
+<figure>
+  <img src="img/method.png" alt="ForkCast pipeline: candidate generation for COMMIT, REOBSERVE and REPLAN; a candidate-conditioned latent world model predicts each candidate's endpoint latent at a common horizon; a shared progress head scores them and the highest-scoring candidate is executed." width="1566" height="664">
+</figure>
+<p>Each candidate is encoded by its planned arm motion and camera offset. An adapted latent world model predicts the candidate's
+endpoint latent at a common horizon, so that continuations of different duration are compared at the same future time. A shared
+progress head maps these latents to task-progress scores. Training data come from branches: alternative candidates are executed
+from the same decision state, and the encoded futures and progress labels supervise prediction and scoring.</p>
+
+<h2>Simulation results</h2>
+<p>Five RoboTwin 2.0 tasks. Closed-loop success (%). <em>Slip</em> and <em>occ</em> are injected object displacement and visual
+occlusion; pooled-OOD averages the two.</p>
+<div class="table-wrap">
+<table>
+  <caption class="small muted" style="caption-side:bottom;text-align:left;padding-top:6px">Frozen &pi;<sub>0.5</sub>; the fixed strategies use the same repair primitives as ForkCast.</caption>
+  <thead><tr><th>Method</th><th>Clean</th><th>Slip</th><th>Occ</th><th>Pooled-OOD</th></tr></thead>
+  <tbody>
+    <tr><td>COMMIT (frozen policy)</td><td>53.3</td><td>10.0</td><td>16.7</td><td>13.3</td></tr>
+    <tr><td>Always REOBSERVE</td><td>36.7</td><td>10.0</td><td>23.3</td><td>16.7</td></tr>
+    <tr><td>Always REPLAN</td><td>70.0</td><td>33.3</td><td>10.0</td><td>21.7</td></tr>
+    <tr class="ours"><td>ForkCast</td><td>76.7</td><td>33.3</td><td>26.7</td><td>30.0</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="small muted">No fixed strategy leads under both disturbances; ForkCast is best or tied in every column.</p>
+
+<p style="margin-top:20px">The selector trained on &pi;<sub>0.5</sub> branches transfers to two other backbones without retraining:</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Backbone</th><th>Clean</th><th>Slip</th><th>Occ</th><th>Pooled-OOD</th></tr></thead>
+  <tbody>
+    <tr><td>RDT</td><td>10.0</td><td>3.3</td><td>6.7</td><td>5.0</td></tr>
+    <tr class="ours"><td>RDT + ForkCast</td><td>33.3</td><td>33.3</td><td>13.3</td><td>23.3</td></tr>
+    <tr><td>XR-0</td><td>16.7</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
+    <tr class="ours"><td>XR-0 + ForkCast</td><td>56.7</td><td>30.0</td><td>13.3</td><td>21.7</td></tr>
+  </tbody>
+</table>
+</div>
+
+<figure>
+  <img src="img/qualitative.png" alt="Head-camera sequences comparing the base policy and ForkCast: simulated cup placement under occlusion, simulated box placement after slip, and real-world can insertion." width="750" height="749" style="max-width:560px;margin:0 auto">
+  <figcaption>Base policy (upper rows) and ForkCast (lower rows). ForkCast uses REOBSERVE then REPLAN in (a) and (c), and REPLAN in
+  (b), before resuming COMMIT. Blue, orange and green mark COMMIT, REOBSERVE and REPLAN.</figcaption>
+</figure>
+
+<h2 id="real-robot">Real robot</h2>
+<p>A dual-arm AgileX PiPER with a pan/tilt head camera on a lift that also carries both arm bases. &pi;<sub>0.5</sub> is
+fine-tuned on 50 demonstrations per task and frozen. ForkCast starts from the simulation-trained weights and is fine-tuned on
+real COMMIT / REOBSERVE / REPLAN branches from 30 local states per task. Each setting uses 30 trials per method.</p>
+<figure>
+  <img src="img/real_setup.png" alt="Real-world platform and four evaluation settings: sponge transfer unobstructed and from a box, can insertion unobstructed and behind a lid." width="1566" height="472">
+</figure>
+<figure>
+  <img src="img/real_results.png" alt="Bar chart of real-world success rates for the base policy and the policy with ForkCast in four settings; ForkCast is higher in all four." width="762" height="557" style="max-width:420px;margin:0 auto">
+  <figcaption>Real-world success with and without ForkCast, 30 trials per method per setting.</figcaption>
+</figure>
+
+<div class="grid2">
+  <figure><video src="video/01_sponge_pick.mp4" controls muted playsinline preload="metadata"></video>
+    <figcaption>Sponge transfer</figcaption></figure>
+  <figure><video src="video/02_sponge_tray.mp4" controls muted playsinline preload="metadata"></video>
+    <figcaption>Sponge transfer to a tray</figcaption></figure>
+  <figure><video src="video/03_can_insert_task1.mp4" controls muted playsinline preload="metadata"></video>
+    <figcaption>Can insertion</figcaption></figure>
+  <figure><video src="video/04_can_insert_task2.mp4" controls muted playsinline preload="metadata"></video>
+    <figcaption>Can insertion (second setting)</figcaption></figure>
+</div>
+
+<h2>Limitations</h2>
+<p>ForkCast selects among three candidate types; it does not give the frozen backbone new manipulation skills, so its
+performance is bounded by the available candidates. Camera probing happens before scoring, so a REOBSERVE candidate costs a
+physical camera motion even when COMMIT is finally chosen.</p>
+
+<h2>BibTeX</h2>
+<pre class="bib">@article{wen2026forkcast,
+  title   = {ForkCast: Predictive Recovery for Vision-Language-Action Policies via Counterfactual Futures},
+  author  = {Wen, Chenru and Zeng, Huajian and Ding, Haokai and Kang, Jian and Duan, Anqing and
+             Zhou, Dawei and Song, Dezhen and Zuo, Xingxing},
+  journal = {arXiv preprint arXiv:2610.18650},
+  year    = {2026}
+}</pre>
+
+<footer><a href="../">&larr; Chenru Wen</a></footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chenru Wen</title>
+<meta name="description" content="Chenru Wen, M.Sc. student in Robotics at MBZUAI. Robot learning, manipulation, and state estimation; recovery for vision-language-action policies.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+
+<header class="intro">
+  <div class="intro-text">
+    <h1>Chenru Wen</h1>
+    <ul class="links">
+      <li><a href="mailto:chenru.wen@mbzuai.ac.ae">chenru.wen@mbzuai.ac.ae</a></li>
+      <li><a href="cv/cv_chenru_wen.pdf">CV</a></li>
+    </ul>
+    <p>I am an M.Sc. student in Robotics at MBZUAI, advised by
+    <a href="https://mbzuai.ac.ae/study/faculty/xingxing-zuo/">Xingxing Zuo</a> and
+    <a href="https://mbzuai.ac.ae/study/faculty/dezhen-song/">Dezhen Song</a>.
+    I am interested in how robots should act when key information is not directly observed: an occluded target, a slipped
+    object, or a hidden mass. My work is at the intersection of robot learning, manipulation, and state estimation.</p>
+    <p>Before MBZUAI, I received a B.Eng. in Computer Science from the Yao Class at Tsinghua University. I was a research intern
+    at OpenDriveLab, Shanghai Innovation Institute, from June to September 2026, and a visiting research intern at UC San Diego
+    in 2024.</p>
+    <p><strong>I am applying to PhD programs for Fall 2027.</strong></p>
+  </div>
+  <img class="photo" src="assets/photo.jpg" alt="Chenru Wen" width="160" height="160">
+</header>
+
+<h2>Publications</h2>
+
+<div class="paper">
+  <a class="thumb" href="forkcast/"><img src="forkcast/img/teaser.png" alt="ForkCast compares the predicted futures of continuing the policy, moving the camera, and replanning the arm." width="768" height="585"></a>
+  <div>
+    <div class="title"><a href="forkcast/">ForkCast: Predictive Recovery for Vision-Language-Action Policies via Counterfactual Futures</a></div>
+    <div class="authors"><span class="me">Chenru Wen</span>*, Huajian Zeng*, Haokai Ding, Jian Kang, Anqing Duan, Dawei Zhou, Dezhen Song, Xingxing Zuo</div>
+    <div class="venue">Under review at ICRA 2027</div>
+    <div class="plinks"><a href="https://arxiv.org/abs/2610.18650">arXiv</a><a href="forkcast/">Project page</a><a href="forkcast/#real-robot">Real-robot videos</a></div>
+    <p class="tldr-line">A frozen VLA policy recovers from occlusion and object slip by comparing forecast futures of continuing,
+    moving the camera, and replanning the arm. Pooled success 13.3%&nbsp;&rarr;&nbsp;30.0% in simulation; gains in all four
+    real-robot settings.</p>
+  </div>
+</div>
+
+<div class="paper">
+  <a class="thumb" href="https://arxiv.org/abs/2505.04718"><img src="assets/lys_teaser.png" alt="Scene layouts generated from text prompts by Lay-Your-Scene." width="1390" height="523"></a>
+  <div>
+    <div class="title"><a href="https://arxiv.org/abs/2505.04718">Lay-Your-Scene: Natural Scene Layout Generation with Diffusion Transformers</a></div>
+    <div class="authors">Divyansh Srivastava, Xiang Zhang, He Wen, <span class="me">Chenru Wen</span>, Zhuowen Tu</div>
+    <div class="venue">ICCV 2025</div>
+    <div class="plinks">
+      <a href="https://openaccess.thecvf.com/content/ICCV2025/html/Srivastava_Lay-Your-Scene_Natural_Scene_Layout_Generation_with_Diffusion_Transformers_ICCV_2025_paper.html">Paper</a>
+      <a href="https://arxiv.org/abs/2505.04718">arXiv</a>
+    </div>
+  </div>
+</div>
+
+<h2>Ongoing</h2>
+<div class="project">
+  <h3>How should estimates of hidden physics enter a learned dexterous policy?</h3>
+  <p class="tag">Target RSS 2027 &middot; simulation, 3 seeds, preliminary</p>
+  <p>A multi-fingered hand carries containers that look identical but hide different fill mass, and five policies differ only
+  in what they receive.</p>
+  <figure class="narrow">
+    <img src="assets/hoi_fd_main.svg" alt="Two-panel chart. Left: success rate against hidden payload mass from 0.03 to 0.48 kg for five policy inputs; the load estimate with variance is highest in the training range, and every input is near zero at 0.03 and 0.06 kg. Right: in-range success per seed and mean: load estimate with variance 0.56, learned force history 0.23, raw force 0.10, no force 0.27, true mass 0.29." width="1380" height="490">
+    <figcaption>With the same force sensor, a filtered load estimate with its variance reached 0.56 in the training range, against
+    0.23 for a learned force history and 0.10 for raw force (0.27 without force). Every input still fails at the light end.</figcaption>
+  </figure>
+</div>
+
+<h2>Other projects</h2>
+<div class="item">
+  <h3>Localization on non-metric maps</h3>
+  <div class="when">MBZUAI, with Dezhen Song &middot; in preparation</div>
+  <p>Localizing a walking camera on a printed visitor map, with no GPS or metric map, from local odometry and a few named landmarks.</p>
+</div>
+<div class="item">
+  <h3>Causal analysis of appearance shifts in VLA policies</h3>
+  <div class="when">Research intern, OpenDriveLab, Shanghai Innovation Institute &middot; Jun&ndash;Sep 2026</div>
+  <p>A change in a target's appearance alone changed a real robot's grasp. I rebuilt the case as matched-state experiments with
+  a fine-tuned &pi;<sub>0.5</sub> and used activation replacement to trace which representations carry the change into the action.</p>
+</div>
+<div class="item">
+  <h3>Real-robot VLA platform</h3>
+  <div class="when">MBZUAI &middot; Dec 2025&ndash;Sep 2026</div>
+  <p>A dual-arm AgileX PiPER with a head camera on a pan/tilt unit and lift. I adapted openpi to it (ROS&nbsp;2 client, Docker policy
+  server, real-time chunking), wrote the camera and lift control, and ran every ForkCast real-robot trial on it.</p>
+</div>
+
+<footer>Last updated October 2026</footer>
+</main>
+</body>
+</html>
