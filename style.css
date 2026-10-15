@@ -140,3 +140,5 @@ figure.narrow { max-width: 620px; }
   .paper { grid-template-columns: 1fr; gap: 10px; }
   .paper .thumb { max-width: 320px; }
 }
+
+[id] { scroll-margin-top: 16px; }
