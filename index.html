@@ -61,17 +61,8 @@
 </div>
 
 <h2>Ongoing</h2>
-<div class="project">
-  <h3>How should estimates of hidden physics enter a learned dexterous policy?</h3>
-  <p class="tag">Target RSS 2027 &middot; preliminary results in simulation</p>
-  <p>A multi-fingered hand carries containers that look identical but hide different fill mass, and five policies differ only
-  in what they receive.</p>
-  <figure class="narrow">
-    <img src="assets/hoi_fd_main.svg" alt="Two-panel chart. Left: success rate against hidden payload mass from 0.03 to 0.48 kg for five policy inputs; the load estimate with variance is highest in the training range, and every input is near zero at 0.03 and 0.06 kg. Right: in-range success per seed and mean: load estimate with variance 0.56, learned force history 0.23, raw force 0.10, no force 0.27, true mass 0.29." width="1380" height="490">
-    <figcaption>With the same force sensor, a filtered load estimate with its variance outperforms both a learned force history
-    and raw force, and raw force does worse than giving no force at all. Every input still fails on the lightest payloads.</figcaption>
-  </figure>
-</div>
+<p>Physical information can reach a learned policy as raw signals, as a learned latent, or as an explicit estimate with its
+uncertainty. I am comparing these forms on a dexterous hand carrying containers whose mass is hidden, in simulation.</p>
 
 <h2>Other projects</h2>
 <div class="item">
