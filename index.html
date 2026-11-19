@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chenru Wen</title>
-<meta name="description" content="Chenru Wen, M.Sc. student in Robotics at MBZUAI. Robot learning for manipulation: recovery from execution failures, and physical estimates as policy inputs.">
+<meta name="description" content="Chenru Wen, M.Sc. student in Robotics at MBZUAI. Robot learning for manipulation: predicting what actions will lead to, recovering from execution failures, and contact events.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,8 +20,9 @@
     <p>I am an M.Sc. student in Robotics at <a href="https://mbzuai.ac.ae/">MBZUAI</a>, advised by
     <a href="https://mbzuai.ac.ae/study/faculty/xingxing-zuo/">Xingxing Zuo</a> and
     <a href="https://mbzuai.ac.ae/study/faculty/dezhen-song/">Dezhen Song</a>.
-    I work on robot learning for manipulation, focusing on recovery from execution failures by forecasting the outcomes of
-    candidate actions. I am currently exploring how physical estimates and their uncertainty should enter dexterous policies.</p>
+    I work on robot learning for manipulation, focusing on predicting what candidate actions will lead to and using those
+    predictions to recover from execution failures. I am currently exploring how such predictions should handle contact, by
+    splitting them at the contact events that decide an action's effect.</p>
     <p>Before MBZUAI, I received a B.Eng. in Computer Science from the
     <a href="https://iiis.tsinghua.edu.cn/en/Yao_Class/About_Yao_Class.htm">Yao Class</a> at
     <a href="https://www.tsinghua.edu.cn/en/">Tsinghua University</a>. I was a research intern at
@@ -61,8 +62,10 @@
 </div>
 
 <h2>Ongoing</h2>
-<p>Physical information can reach a learned policy as raw signals, as a learned latent, or as an explicit estimate with its
-uncertainty. I am comparing these forms on a dexterous hand carrying containers whose mass is hidden, in simulation.</p>
+<p>An action's effect is decided by how contact unfolds, so I am exploring predictions split at contact release: first from
+the action to the object's state when contact ends, then from that state to the outcome. In simulated pushing, the split
+makes outcomes predictable enough to choose between actions; on a simulated multi-fingered hand, the first stage breaks,
+because the hand's contact splits by posture into distinct modes.</p>
 
 <h2>Other projects</h2>
 <div class="item">
@@ -84,7 +87,7 @@ uncertainty. I am comparing these forms on a dexterous hand carrying containers 
   real-robot trial on it.</p>
 </div>
 
-<footer>Last updated October 2026</footer>
+<footer>Last updated November 2026</footer>
 </main>
 </body>
 </html>
